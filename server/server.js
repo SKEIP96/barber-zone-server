@@ -1,10 +1,16 @@
 import Fastify from "fastify";
+import app from "./app.js"; // импортируем файл с маршрутами
 
-const app = Fastify({ logger: true });
+const server = Fastify({ logger: true });
 
-app.get("/health", async () => ({ status: "ok" }));
+// Регистрируем все маршруты и модули из app.js
+server.register(app);
 
-app.listen({ port: 3000 }, (err, address) => {
-  if (err) throw err;
+// Запуск сервера
+server.listen({ port: 3000 }, (err, address) => {
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  }
   console.log(`Server running at ${address}`);
 });
